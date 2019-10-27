@@ -1,16 +1,20 @@
+import numpy as np
+
 class RuleManager:
     def __init__(self):
         self.rules = []
-        self.wolfram_options = [Case7(), Case6(), Case5(), Case4(),
-                                Case3(), Case2(), Case1(), Case0()]
 
     def set_rule(self, number):
+        wolfram_options = [Bit128(), Bit64(), Bit32(), Bit16(),
+                           Bit8(), Bit4(), Bit2(), Bit1()]
+
         rule_in_binary = self._bin_convert(number)
+
         rule = np.array([int(x) for x in list(rule_in_binary)]) 
         
         for i, j in enumerate(rule):
             if j==1:
-                self.rules.append(self.wolfram_options[i])
+                self.rules.append(wolfram_options[i])
     
     def _bin_convert(self, rule_num):
         return format(rule_num, '08b')
@@ -24,19 +28,20 @@ class RuleManager:
     def add_rule(self, rule_object):
         self.rule.append(rule_object)
 
-class Case0:
+class Bit1:
     def __init__(self):
         self.case_num = 0
     
     def apply(self, current, left, right):
         n1_state = (left==0)
         n2_state = (right==0)
-        result = np.logical_and(n1_state, n2_state).astype(int)
-
-        result = result*(current==0).astype(int)
+        current_state = (current==0)
+    
+        result = np.logical_and(n1_state, n2_state)
+        result = np.logical_and(result, current_state).astype(int)
         return result
 
-class Case1:
+class Bit2:
     def __init__(self):
         self.case_num = 1
 
@@ -48,7 +53,7 @@ class Case1:
         result = result*(current==0).astype(int)
         return result
 
-class Case2:
+class Bit4:
     def __init__(self):
         self.case_num = 2
 
@@ -60,7 +65,7 @@ class Case2:
         result = result*(current==1).astype(int)
         return result
 
-class Case3:
+class Bit8:
     def __init__(self):
         self.case_num = 3
 
@@ -72,7 +77,7 @@ class Case3:
         result = result*(current==1).astype(int)
         return result
 
-class Case4:
+class Bit16:
     def __init__(self):
         self.case_num = 4
 
@@ -83,7 +88,7 @@ class Case4:
         result = result*(current==0).astype(int)
         return result
 
-class Case5:
+class Bit32:
     def __init__(self):
         self.case_num = 5
 
@@ -95,7 +100,7 @@ class Case5:
         result = result*(current==0).astype(int)
         return result
 
-class Case6:
+class Bit64:
     def __init__(self):
         self.case_num = 6
 
@@ -107,7 +112,7 @@ class Case6:
         result = result*(current==1).astype(int)
         return result
 
-class Case7:
+class Bit128:
     def __init__(self):
         self.case_num = 7
 
