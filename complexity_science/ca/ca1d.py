@@ -85,14 +85,13 @@ class CA_1D():
 
     def run_wolfram_rule(self, rule_number, iterations, show_figure=True):
         self.set_wolfram_rule(rule_number)
-
-        result = []
         
+        result = [self.cells]
         for i in range(iterations):
             result.append(self.evolve())
 
         if show_figure:
-            plt.imshow(result, cmap='Paired')
+            plt.imshow(result, cmap='Greens')
             plt.show()
 
         return result
