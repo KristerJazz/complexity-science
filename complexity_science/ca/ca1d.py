@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from rules import RuleManager
+from .rules import RuleManager
 
 class CA_1D():
     def __init__(self, N):
