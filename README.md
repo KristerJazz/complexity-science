@@ -21,9 +21,7 @@ Sample usage:
 
 `cellular_automata.initialize(50) #initializes the 50th cell of the CA`
 
-`cellular_automata.set_rule(30)	   #set wolfram rule number `
-
-`cellular_automata.evolve()        #returns the resulting state of the CA following the rule`
+`cellular_automata.run_wolfram_rule(30, 100) #returns the resulting state of the CA following the rule and plots the result with a default colormap`
 
 -------------------------------------------------------------------------------------
 
