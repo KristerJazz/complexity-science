@@ -116,3 +116,5 @@ class CA_1D():
 
         return result
         
+    def add_rule(self, rule_object):
+        self.rm.add_rule(rule_object)

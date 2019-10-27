@@ -26,7 +26,7 @@ class RuleManager:
         return result
 
     def add_rule(self, rule_object):
-        self.rule.append(rule_object)
+        self.rules.append(rule_object)
 
 class Bit1:
     def __init__(self):
