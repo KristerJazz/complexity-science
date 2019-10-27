@@ -79,11 +79,31 @@ class CA_1D():
         Automatically updates neighbors after initialization
             n1 : left neighbor
             n2 : right neighbor
+        -------------
+        Parameters:
+            index_list = list of index to be initialized with value 1 
+        -------------
+        Returns:
+            None : Updates the cell with initialized values
         """
-        self.cells[int(index_list)] = 1
+        assert(type(index_list)==type([])), "index_list must be a list"
+        for i in index_list:
+            self.cells[i] = 1
+
         self.update_neighbors()
 
     def run_wolfram_rule(self, rule_number, iterations, show_figure=True):
+        """
+        Run cellular automata according to the wolfram rule_number assigned.
+        -------------
+        Parameters:
+            rule_number = values from (0-255). Refer to wolfram's rule numbers
+            iterations = number of times for the rule to be applied
+            show_figure = Default is True, outputs the figure at run time
+        -------------
+        Returns:
+            result = resulting N x iteration array of the CA evolution
+        """
         self.set_wolfram_rule(rule_number)
         
         result = [self.cells]
