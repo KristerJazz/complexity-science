@@ -1,5 +1,7 @@
 import numpy as np
-from .rules import RuleManager
+import matplotlib.pyplot as plt
+
+from rules import RuleManager
 
 class CA_1D():
     def __init__(self, N):
@@ -35,7 +37,7 @@ class CA_1D():
         self.n1 = np.roll(self.cells, 1)
         self.n2 = np.roll(self.cells, -1)
 
-    def set_rule(self, rule_number):
+    def set_wolfram_rule(self, rule_number):
         """
         Sets the CA rule to a wolfram rule number
         -------------
@@ -78,5 +80,20 @@ class CA_1D():
             n1 : left neighbor
             n2 : right neighbor
         """
-        self.cells[int(index)] = 1
+        self.cells[int(index_list)] = 1
         self.update_neighbors()
+
+    def run_wolfram_rule(self, rule_number, iterations, show_figure=True):
+        self.set_wolfram_rule(rule_number)
+
+        result = []
+        
+        for i in range(iterations):
+            result.append(self.evolve())
+
+        if show_figure:
+            plt.imshow(result, cmap='Paired')
+            plt.show()
+
+        return result
+        
