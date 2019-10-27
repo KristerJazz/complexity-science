@@ -1,2 +1,2 @@
 from .rules import *
-from .ca_1d import *
+from .ca1d import *
