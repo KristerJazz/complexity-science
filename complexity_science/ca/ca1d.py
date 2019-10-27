@@ -14,6 +14,7 @@ class CA_1D():
         Returns:
             None
         """
+        self.num_cells = N
         self.cells = np.zeros([N], dtype=int)
         self.rm = RuleManager() 
         self._initialize_neighbors()
@@ -87,6 +88,7 @@ class CA_1D():
             None : Updates the cell with initialized values
         """
         assert(type(index_list)==type([])), "index_list must be a list"
+        self.cells = np.zeros([self.num_cells], dtype=int)
         for i in index_list:
             self.cells[i] = 1
 
@@ -113,7 +115,9 @@ class CA_1D():
         if show_figure:
             plt.imshow(result, cmap='Greens')
             plt.show()
-
+        
+        plt.clf()
+        self.reset_rule()
         return result
         
     def add_rule(self, rule_object):
