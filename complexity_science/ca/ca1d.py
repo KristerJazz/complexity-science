@@ -117,4 +117,13 @@ class CA_1D():
         return result
         
     def add_rule(self, rule_object):
-        self.rm.add_rule(rule_object)
+        """
+        Add the rule object to the rule manager.
+        This rule will apply for every evolve() function call.
+        """
+        self.rm.add_rule(rule_object) 
+    def reset_rule(self):
+        """
+        Resets the rule list from RuleManager
+        """
+        self.rm.reset_rule()

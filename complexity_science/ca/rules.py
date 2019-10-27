@@ -28,6 +28,9 @@ class RuleManager:
     def add_rule(self, rule_object):
         self.rules.append(rule_object)
 
+    def reset_rule(self):
+        self.rules = []
+
 class Bit1:
     def __init__(self):
         self.case_num = 0
