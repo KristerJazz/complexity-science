@@ -48,9 +48,10 @@ class Bit2:
     def apply(self, current, left ,right):
         n1_state = (left==0)
         n2_state = (right==1)
-        result = np.logical_and(n1_state, n2_state).astype(int)
+        current_state = (current==0)
 
-        result = result*(current==0).astype(int)
+        result = np.logical_and(n1_state, n2_state)
+        result = np.logical_and(result, current_state).astype(int)
         return result
 
 class Bit4:
@@ -60,9 +61,10 @@ class Bit4:
     def apply(self, current, left ,right):
         n1_state = (left==0)
         n2_state = (right==0)
-        result = np.logical_and(n1_state, n2_state).astype(int)
+        current_state = (current==1)
 
-        result = result*(current==1).astype(int)
+        result = np.logical_and(n1_state, n2_state)
+        result = np.logical_and(result, current_state).astype(int)
         return result
 
 class Bit8:
@@ -72,9 +74,10 @@ class Bit8:
     def apply(self, current, left ,right):
         n1_state = (left==0)
         n2_state = (right==1)
-        result = np.logical_and(n1_state, n2_state).astype(int)
+        current_state = (current==1)
 
-        result = result*(current==1).astype(int)
+        result = np.logical_and(n1_state, n2_state)
+        result = np.logical_and(result, current_state).astype(int)
         return result
 
 class Bit16:
@@ -84,8 +87,10 @@ class Bit16:
     def apply(self, current, left ,right):
         n1_state = (left==1)
         n2_state = (right==0)
-        result = np.logical_and(n1_state, n2_state).astype(int)
-        result = result*(current==0).astype(int)
+        current_state = (current==0)
+
+        result = np.logical_and(n1_state, n2_state)
+        result = np.logical_and(result, current_state).astype(int)
         return result
 
 class Bit32:
@@ -95,9 +100,10 @@ class Bit32:
     def apply(self, current, left ,right):
         n1_state = (left==1)
         n2_state = (right==1)
-        result = np.logical_and(n1_state, n2_state).astype(int)
+        current_state = (current==0)
 
-        result = result*(current==0).astype(int)
+        result = np.logical_and(n1_state, n2_state)
+        result = np.logical_and(result, current_state).astype(int)
         return result
 
 class Bit64:
@@ -107,9 +113,10 @@ class Bit64:
     def apply(self, current, left ,right):
         n1_state = (left==1)
         n2_state = (right==0)
-        result = np.logical_and(n1_state, n2_state).astype(int)
+        current_state = (current==1)
 
-        result = result*(current==1).astype(int)
+        result = np.logical_and(n1_state, n2_state)
+        result = np.logical_and(result, current_state).astype(int)
         return result
 
 class Bit128:
@@ -119,8 +126,9 @@ class Bit128:
     def apply(self, current, left ,right):
         n1_state = (left==1)
         n2_state = (right==1)
-        result = np.logical_and(n1_state, n2_state).astype(int)
+        current_state = (current==1)
 
-        result = result*(current==1).astype(int)
+        result = np.logical_and(n1_state, n2_state)
+        result = np.logical_and(result, current_state).astype(int)
         return result
 
