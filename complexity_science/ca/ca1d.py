@@ -17,14 +17,7 @@ class CA_1D():
         self.num_cells = N
         self.cells = np.zeros([N], dtype=int)
         self.rm = RuleManager() 
-        self._initialize_neighbors()
-
-    def _initialize_neighbors(self):
-        """
-        Initializes the neighbors with zero values 
-        """
-        self.n1 = np.roll(self.cells, 1)
-        self.n2 = np.roll(self.cells, -1)
+        self.update_neighbors()
 
     def update_neighbors(self):
         """
