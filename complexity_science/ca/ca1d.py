@@ -56,8 +56,11 @@ class CA_1D():
         Returns:
             new_state = new state after applying the rule  
         """
-
-        new_state = self.rm.apply(self.cells, self.n1, self.n2)
+        neighbors = {}
+        neighbors['left'] = self.n1
+        neighbors['right'] = self.n2
+        
+        new_state = self.rm.apply(self.cells, neighbors)
         self.cells = new_state
 
         #Dont forget to update neighbors after evolution
@@ -86,6 +89,11 @@ class CA_1D():
             self.cells[i] = 1
 
         self.update_neighbors()
+
+    def initialize_randomly(self, threshold, ):
+        self.cells = np.random.random(self.num_cells) 
+        if integer:
+            np.random.random
 
     def run_wolfram_rule(self, rule_number, iterations, show_figure=True):
         """
