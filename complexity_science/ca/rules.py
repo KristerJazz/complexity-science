@@ -21,6 +21,12 @@ class RuleManager:
         for i, j in enumerate(rule):
             if j==1:
                 self.rules.append(wolfram_options[i])
+
+    def set_brians_brain(self):
+        self.add_rule(BriansBrain())
+
+    def set_game_of_life(self):
+        self.add_rule(GameOfLife())
     
     def _bin_convert(self, rule_num):
         return format(rule_num, '08b')
@@ -161,8 +167,10 @@ class Bit128:
 
 class GameOfLife:
     def apply(self, current, neighbors):
+        total_neighbors = np.zeros_like(current)
+
         for key in neighbors:
-            total_neighbors += neighbors[keys]
+            total_neighbors += neighbors[key]
 
         result = np.zeros_like(current)
         state = current.copy()
@@ -182,9 +190,28 @@ class GameOfLife:
         state -= np.logical_and(live, less_two).astype(int)
         state -= np.logical_and(live, more_three).astype(int)
 
-        result += state
+        result = np.logical_or(result, state).astype(int)
 
         return result
+
+class BriansBrain:
+    def apply(self, current, neighbors):
+        result = np.zeros_like(current)
+        sum_one = np.zeros_like(current)
+        for key in neighbors:
+            sum_one += (neighbors[key]==1).astype(int)
+
+        current_state = current.copy()
+        zero = (current_state ==0)
+        two_1 = (sum_one ==2)
+        current_state[current_state==2] = 0
+        current_state[current_state==1] = 2
+
+        result += current_state
+        result += np.logical_and(zero, two_1).astype(int)
+        return result
+
+###DEPRECATED###
 """
 class RuleManager1D(RuleManager):
     def __init__(self):
