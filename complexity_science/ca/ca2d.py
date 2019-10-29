@@ -88,9 +88,21 @@ class CA_2D:
         Returns:
             None : Updates the cell with initialized values
         """
-        self.cells = (self.cells > ratio).astype(int) 
+        self.cells = (np.random.random(self.size) > ratio).astype(int) 
         self.update_neighbors()
 
+    def initialize_random(self):
+        """
+        Initializes the ca randomly with random values from 0 to 1
+
+        Automatically updates neighbors after initialization
+        -------------
+        Returns:
+            None : Updates the cell with initialized values
+        """
+        self.cells = np.random.random(self.size)
+        self.update_neighbors()
+ 
     def initialize_random_int(self, min_value, max_value):
         """
         Initializes the ca randomly with integers from min_value to max_value 
