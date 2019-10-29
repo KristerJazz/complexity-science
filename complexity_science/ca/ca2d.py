@@ -7,7 +7,7 @@ from .rules import RuleManager
 class CA_2D:
     def __init__(self, dim):
         """
-        Creates an uninitialized 2D cellular automata object of a given dimension.
+        Creates an 2D cellular automata object of a given dimension with random value from 0-1. See related initialize_ functions to initialize properly.
         ---------------
         Parameters:
             dim = cellular automata matrix shape
@@ -79,26 +79,34 @@ class CA_2D:
 
         return new_state
 
-    def initialize(self, integer = True):
+    def initialize_random_bin(self, ratio):
         """
-        Initializes the ca from the list of index
-            cells[index] = 1
+        Initializes the ca randomly with a approximated ratio of 1 and 0 
 
         Automatically updates neighbors after initialization
-            n1 = top neighbor of new_state
-            n2 = left neighbor of new_state 
-            n3 = right neighbor of new_state
-            n4 = bottom neighbor of new_state
-
-        -------------
-        Parameters:
-            index_list = list of index to be initialized with value 1 
         -------------
         Returns:
             None : Updates the cell with initialized values
         """
-        #self.cells = (self.cells > 0.6).astype(int) 
-        self.cells = np.random.randint(3, size=self.size)  
+        self.cells = (self.cells > ratio).astype(int) 
+        self.update_neighbors()
+
+    def initialize_random_int(self, min_value, max_value):
+        """
+        Initializes the ca randomly with integers from min_value to max_value 
+
+        Automatically updates neighbors after initialization
+        -------------
+        Parameters:
+            min_value: lowest possible integer state
+            max_value: highest possible integer state
+
+        max_value - min_value = total number of state of the system
+        -------------
+        Returns:
+            None : Updates the cell with initialized values
+        """
+        self.cells = np.random.randint(min_value, max_value, size=self.size)  
         self.update_neighbors()
         
     def add_rule(self, rule_object):
@@ -123,6 +131,8 @@ class CA_2D:
         ani = animation.FuncAnimation(fig, self.update_fig, interval=50, blit=True)
         plt.show()
 
+        self.rm.reset_rule()
+
     def run_brians_brain(self):
         self.rm.set_brians_brain()
         fig = plt.figure()
@@ -130,6 +140,8 @@ class CA_2D:
 
         ani = animation.FuncAnimation(fig, self.update_fig, interval=50, blit=True)
         plt.show()
+
+        self.rm.reset_rule()
 
     def update_fig(self, *args):
         self.cells = self.evolve()
