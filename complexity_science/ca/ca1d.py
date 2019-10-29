@@ -10,21 +10,16 @@ class CA_1D():
         -------------
         Parameters:
             N = number of cells
+        n1 : left neighbor
+        n2 : right neighbor
         ------------- 
         Returns:
             None
         """
         self.num_cells = N
-        self.cells = np.zeros([N], dtype=int)
+        self.cells = np.zeros([N])
         self.rm = RuleManager() 
-        self._initialize_neighbors()
-
-    def _initialize_neighbors(self):
-        """
-        Initializes the neighbors with zero values 
-        """
-        self.n1 = np.roll(self.cells, 1)
-        self.n2 = np.roll(self.cells, -1)
+        self.update_neighbors()
 
     def update_neighbors(self):
         """
@@ -63,8 +58,11 @@ class CA_1D():
         Returns:
             new_state = new state after applying the rule  
         """
-
-        new_state = self.rm.apply(self.cells, self.n1, self.n2)
+        neighbors = {}
+        neighbors['left'] = self.n1
+        neighbors['right'] = self.n2
+        
+        new_state = self.rm.apply(self.cells, neighbors)
         self.cells = new_state
 
         #Dont forget to update neighbors after evolution
@@ -72,14 +70,12 @@ class CA_1D():
 
         return new_state
 
-    def initialize(self, index_list):
+    def initialize_index(self, index_list):
         """
         Initializes the ca from the list of index
             cells[index] = 1
 
         Automatically updates neighbors after initialization
-            n1 : left neighbor
-            n2 : right neighbor
         -------------
         Parameters:
             index_list = list of index to be initialized with value 1 
@@ -92,6 +88,33 @@ class CA_1D():
         for i in index_list:
             self.cells[i] = 1
 
+        self.update_neighbors()
+
+    def initialize_binary(self, ratio):
+        """
+        Initializes the CA with a ratio of 1 and 0 values
+
+        Automatically updates neighbors after initialization
+        -------------
+        Parameters:
+            ratio = ratio of "1" state over the "0" state 
+        -------------
+        Returns:
+            None : Updates the cell with initialized values
+        """
+        self.cells = (np.random.random(self.num_cells)>ratio).astype(int) 
+        self.update_neighbors()
+
+    def initialize_random(self):
+        """
+        Initializes the CA with a random value from 0 to 1 
+
+        Automatically updates neighbors after initialization
+        -------------
+        Returns:
+            None : Updates the cell with initialized values
+        """
+        self.cells = np.random.random(self.num_cells) 
         self.update_neighbors()
 
     def run_wolfram_rule(self, rule_number, iterations, show_figure=True):
@@ -126,6 +149,7 @@ class CA_1D():
         This rule will apply for every evolve() function call.
         """
         self.rm.add_rule(rule_object) 
+
     def reset_rule(self):
         """
         Resets the rule list from RuleManager

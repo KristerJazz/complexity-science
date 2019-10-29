@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
         name = "complexity-science",
-        version = "0.0.1",
+        version = "0.0.2",
         author = "Krister Jazz Urog",
         author_email = "kristerjazz.urog@gmail.com",
         description = "A package for complexity science research",
@@ -15,7 +15,7 @@ setuptools.setup(
         packages = setuptools.find_packages(),
         classifiers = [
             "Programming Language :: Python :: 3",
-            "License :: OSI Approved :: MIT License",
+            "License :: OSI Approved :: BSD License"
             "Operating System :: OS Independent",
         ],
         python_requires = '>3.6',
