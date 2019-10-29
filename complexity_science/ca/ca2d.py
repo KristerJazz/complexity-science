@@ -134,11 +134,11 @@ class CA_2D:
         """
         self.rm.reset_rule()
 
-    def animate_game_of_life(self, savefig=False):
+    def animate_game_of_life(self, cmap='plasma', savefig=False):
         self.rm.set_game_of_life()
 
         fig = plt.figure()
-        self.im = plt.imshow(self.cell(), animated=True)
+        self.im = plt.imshow(self.cell(), cmap=cmap ,animated=True)
 
         ani = animation.FuncAnimation(fig, self.update_fig, interval=50, blit=True)
         plt.show()
@@ -148,10 +148,10 @@ class CA_2D:
         if savefig:
             ani.save('GameOfLife.mp4')
 
-    def animate_brians_brain(self, savefig=False):
+    def animate_brians_brain(self, cmap='plasma', savefig=False):
         self.rm.set_brians_brain()
         fig = plt.figure()
-        self.im = plt.imshow(self.cell(), animated=True)
+        self.im = plt.imshow(self.cell(), cmap=cmap, animated=True)
 
         ani = animation.FuncAnimation(fig, self.update_fig, interval=50, blit=True)
         plt.show()
