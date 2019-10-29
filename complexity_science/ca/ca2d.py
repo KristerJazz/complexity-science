@@ -122,7 +122,7 @@ class CA_2D:
         """
         self.rm.reset_rule()
 
-    def run_game_of_life(self, iterations):
+    def animate_game_of_life(self):
         self.rm.set_game_of_life()
 
         fig = plt.figure()
@@ -133,7 +133,7 @@ class CA_2D:
 
         self.rm.reset_rule()
 
-    def run_brians_brain(self):
+    def animate_brians_brain(self):
         self.rm.set_brians_brain()
         fig = plt.figure()
         self.im = plt.imshow(self.cell(), animated=True)
