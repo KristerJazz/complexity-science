@@ -175,7 +175,7 @@ class MOORE_CA_t(CA_2D):
 
 class VON_CA_t(CA_2D):
     def __init__(self, dim):
-        CA_2D.__init__(dim)
+        CA_2D.__init__(self, dim)
         self.neighborhood = "Toroidal Von Neumann"
         print("You created a toroidal CA with Von Neumann neighborhood")
 
