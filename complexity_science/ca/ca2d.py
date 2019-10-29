@@ -158,7 +158,7 @@ class CA_2D:
 
         self.rm.reset_rule()
 
-        if savefigure:
+        if savefig:
             ani.save('BriansBrain.mp4')
 
     def update_fig(self, *args):
