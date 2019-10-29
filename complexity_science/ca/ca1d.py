@@ -10,12 +10,14 @@ class CA_1D():
         -------------
         Parameters:
             N = number of cells
+        n1 : left neighbor
+        n2 : right neighbor
         ------------- 
         Returns:
             None
         """
         self.num_cells = N
-        self.cells = np.zeros([N], dtype=int)
+        self.cells = np.zeros([N])
         self.rm = RuleManager() 
         self.update_neighbors()
 
@@ -68,14 +70,12 @@ class CA_1D():
 
         return new_state
 
-    def initialize(self, index_list):
+    def initialize_index(self, index_list):
         """
         Initializes the ca from the list of index
             cells[index] = 1
 
         Automatically updates neighbors after initialization
-            n1 : left neighbor
-            n2 : right neighbor
         -------------
         Parameters:
             index_list = list of index to be initialized with value 1 
@@ -90,10 +90,32 @@ class CA_1D():
 
         self.update_neighbors()
 
-    def initialize_randomly(self, threshold, ):
+    def initialize_binary(self, ratio):
+        """
+        Initializes the CA with a ratio of 1 and 0 values
+
+        Automatically updates neighbors after initialization
+        -------------
+        Parameters:
+            ratio = ratio of "1" state over the "0" state 
+        -------------
+        Returns:
+            None : Updates the cell with initialized values
+        """
+        self.cells = (np.random.random(self.num_cells)>ratio).astype(int) 
+        self.update_neighbors()
+
+    def initialize_random(self):
+        """
+        Initializes the CA with a random value from 0 to 1 
+
+        Automatically updates neighbors after initialization
+        -------------
+        Returns:
+            None : Updates the cell with initialized values
+        """
         self.cells = np.random.random(self.num_cells) 
-        if integer:
-            np.random.random
+        self.update_neighbors()
 
     def run_wolfram_rule(self, rule_number, iterations, show_figure=True):
         """
@@ -127,6 +149,7 @@ class CA_1D():
         This rule will apply for every evolve() function call.
         """
         self.rm.add_rule(rule_object) 
+
     def reset_rule(self):
         """
         Resets the rule list from RuleManager
