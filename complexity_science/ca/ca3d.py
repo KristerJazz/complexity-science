@@ -160,7 +160,7 @@ class CA_3D:
         """
         self.rm.reset_rule()
 
-    def try_3d(self):
+    def try_3d_animate(self):
         self.rm.set_game_of_life()
 
         fig = plt.figure()
