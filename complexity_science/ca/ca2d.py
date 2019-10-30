@@ -29,14 +29,6 @@ class CA_2D:
         self.cells = np.random.random(dim)
         self.rm = RuleManager()
         self.update_neighbors()
-        self.n1 = np.zeros(dim, dtype=int)
-        self.n2 = np.zeros(dim, dtype=int)
-        self.n3 = np.zeros(dim, dtype=int)
-        self.n4 = np.zeros(dim, dtype=int)
-        self.n5 = np.zeros(dim, dtype=int)
-        self.n6 = np.zeros(dim, dtype=int)
-        self.n7 = np.zeros(dim, dtype=int)
-        self.n8 = np.zeros(dim, dtype=int)
 
     def update_neighbors(self):
         raise NotImplementedError("This is the base class; Please choose a CA with defined neighborhood:\n VON_CA_t, VON_CA, MOORE_CA_t, MOORE_CA")
@@ -61,17 +53,7 @@ class CA_2D:
         Returns:
             new_state = new state after applying the rule  
         """
-        neighbors = {}
-        neighbors['top-left'] = self.n1
-        neighbors['top'] = self.n2
-        neighbors['top-right'] = self.n3
-        neighbors['left'] = self.n4
-        neighbors['right'] = self.n5
-        neighbors['bottom-left'] = self.n6
-        neighbors['bottom'] = self.n7
-        neighbors['bottom-right'] = self.n8
-
-        new_state = self.rm.apply(self.cells, neighbors)
+        new_state = self.rm.apply(self.cells, self.neighbors)
         self.cells = new_state
 
         #Dont forget to update neighbors after evolution
@@ -176,14 +158,25 @@ class MOORE_CA_t(CA_2D):
         print("You created a toroidal CA with Moore neighborhood")
 
     def update_neighbors(self):
-        self.n2 = np.roll(self.cells, 1, axis=0)
-        self.n1 = np.roll(self.n2, 1, axis=1)
-        self.n3 = np.roll(self.n2, -1, axis=1)
-        self.n4 = np.roll(self.cells, 1, axis=1)
-        self.n5 = np.roll(self.cells, -1, axis=1)
-        self.n7 = np.roll(self.cells, -1, axis=0)
-        self.n6 = np.roll(self.n7, 1, axis=1)
-        self.n8 = np.roll(self.n7, -1, axis=1)
+        n2 = np.roll(self.cells, 1, axis=0)
+        n1 = np.roll(n2, 1, axis=1)
+        n3 = np.roll(n2, -1, axis=1)
+        n4 = np.roll(self.cells, 1, axis=1)
+        n5 = np.roll(self.cells, -1, axis=1)
+        n7 = np.roll(self.cells, -1, axis=0)
+        n6 = np.roll(n7, 1, axis=1)
+        n8 = np.roll(n7, -1, axis=1)
+
+        self.neighbors = {}
+        self.neighbors['top-left'] = n1
+        self.neighbors['top'] = n2
+        self.neighbors['top-right'] = n3
+        self.neighbors['left'] = n4
+        self.neighbors['right'] = n5
+        self.neighbors['bottom-left'] = n6
+        self.neighbors['bottom'] = n7
+        self.neighbors['bottom-right'] = n8
+
 
 class VON_CA_t(CA_2D):
     def __init__(self, dim):

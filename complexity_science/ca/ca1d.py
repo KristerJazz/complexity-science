@@ -30,8 +30,9 @@ class CA_1D():
         Returns:
             None
         """
-        self.n1 = np.roll(self.cells, 1)
-        self.n2 = np.roll(self.cells, -1)
+        self.neighbors = {}
+        self.neighbors['left'] = np.roll(self.cells, 1)
+        self.neighbors['right'] = np.roll(self.cells, -1)
 
     def set_wolfram_rule(self, rule_number):
         """
@@ -58,11 +59,7 @@ class CA_1D():
         Returns:
             new_state = new state after applying the rule  
         """
-        neighbors = {}
-        neighbors['left'] = self.n1
-        neighbors['right'] = self.n2
-        
-        new_state = self.rm.apply(self.cells, neighbors)
+        new_state = self.rm.apply(self.cells, self.neighbors)
         self.cells = new_state
 
         #Dont forget to update neighbors after evolution
@@ -103,6 +100,16 @@ class CA_1D():
             None : Updates the cell with initialized values
         """
         self.cells = (np.random.random(self.num_cells)>ratio).astype(int) 
+        self.update_neighbors()
+
+    def initialize_zero(self):
+        """
+        Initializes the cells with zero values
+        -------------
+        Returns:
+            None : Updates the cells to zero values
+        """
+        self.cells = np.zeros(self.num_cells)
         self.update_neighbors()
 
     def initialize_random(self):
