@@ -185,10 +185,11 @@ class VON_CA_t(CA_2D):
         print("You created a toroidal CA with Von Neumann neighborhood")
 
     def update_neighbors(self):
-        self.n1 = np.roll(self.cells, 1, axis=0)
-        self.n2 = np.roll(self.cells, 1, axis=1)
-        self.n3 = np.roll(self.cells, -1, axis=1)
-        self.n4 = np.roll(self.cells, -1, axis=0)
+        self.neighbors = {}
+        self.neighbors['top'] = np.roll(self.cells, 1, axis=0)
+        self.neighbors['left'] = np.roll(self.cells, 1, axis=1)
+        self.neighbors['right'] = np.roll(self.cells, -1, axis=1)
+        self.neighbors['bottom'] = np.roll(self.cells, -1, axis=0)
 
 class MOORE_CA(CA_2D):
     def __init__(self, dim):
@@ -197,31 +198,40 @@ class MOORE_CA(CA_2D):
         print("You created a NON-Toroidal CA with Moore neighborhood")
 
     def update_neighbors(self):
-        self.n2 = np.roll(self.cells, 1, axis=0)
-        self.n2[0,:] = 0
-        self.n1 = np.roll(self.n2, 1, axis=1)
-        self.n1[0,:] = 0
-        self.n1[:,0] = 0
-        self.n3 = np.roll(self.n2, -1, axis=1)
-        self.n3[0,:] = 0
-        self.n3[:,-1] = 0
+        n2 = np.roll(self.cells, 1, axis=0)
+        n2[0,:] = 0
+        n1 = np.roll(n2, 1, axis=1)
+        n1[0,:] = 0
+        n1[:,0] = 0
+        n3 = np.roll(n2, -1, axis=1)
+        n3[0,:] = 0
+        n3[:,-1] = 0
 
-        self.n4 = np.roll(self.cells, 1, axis=1)
-        self.n4[:,0] = 0
-        self.n5 = np.roll(self.cells, -1, axis=1)
-        self.n5[:,-1] = 0
+        n4 = np.roll(self.cells, 1, axis=1)
+        n4[:,0] = 0
+        n5 = np.roll(self.cells, -1, axis=1)
+        n5[:,-1] = 0
 
-        self.n7 = np.roll(self.cells, -1, axis=0)
-        self.n7[-1,:] = 0
-        self.n7[:,0] = 0
+        n7 = np.roll(self.cells, -1, axis=0)
+        n7[-1,:] = 0
+        n7[:,0] = 0
 
-        self.n6 = np.roll(self.n7, 1, axis=1)
-        self.n6[-1,:] = 0
+        n6 = np.roll(n7, 1, axis=1)
+        n6[-1,:] = 0
 
-        self.n8 = np.roll(self.n7, -1, axis=1)
-        self.n8[-1,:] = 0
-        self.n8[:,-1] = 0
+        n8 = np.roll(n7, -1, axis=1)
+        n8[-1,:] = 0
+        n8[:,-1] = 0
 
+        self.neighbors = {}
+        self.neighbors['top-left'] = n1
+        self.neighbors['top'] = n2
+        self.neighbors['top-right'] = n3
+        self.neighbors['left'] = n4
+        self.neighbors['right'] = n5
+        self.neighbors['bottom-left'] = n6
+        self.neighbors['bottom'] = n7
+        self.neighbors['bottom-right'] = n8
 
 class VON_CA(CA_2D):
     def __init__(self, dim):
@@ -230,11 +240,19 @@ class VON_CA(CA_2D):
         print("You created a NON-Toroidal CA with Von Neumann neighborhood")
 
     def update_neighbors(self):
-        self.n1 = np.roll(self.cells, 1, axis=0)
-        self.n1[0,:] = 0
-        self.n2 = np.roll(self.cells, 1, axis=1)
-        self.n2[:,0] = 0
-        self.n3 = np.roll(self.cells, -1, axis=1)
-        self.n3[:,-1] = 0
-        self.n4 = np.roll(self.cells, -1, axis=0)
-        self.n4[-1,:] = 0
+        n1 = np.roll(self.cells, 1, axis=0)
+        n1[0,:] = 0
+        n2 = np.roll(self.cells, 1, axis=1)
+        n2[:,0] = 0
+        n3 = np.roll(self.cells, -1, axis=1)
+        n3[:,-1] = 0
+        n4 = np.roll(self.cells, -1, axis=0)
+        n4[-1,:] = 0
+
+        self.neighbors = {}
+        self.neighbors['top'] = n1
+        self.neighbors['left'] = n2
+        self.neighbors['right'] = n3
+        self.neighbors['bottom'] = n4
+
+
