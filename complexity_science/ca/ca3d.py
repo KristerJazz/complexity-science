@@ -4,10 +4,10 @@ import matplotlib.animation as animation
 from .rules import RuleManager
 
 
-class CA_2D:
+class CA_3D:
     def __init__(self, dim):
         """
-        Creates an 2D cellular automata object of a given dimension with random value from 0-1. See related initialize_ functions to initialize properly.
+        Creates an 3D cellular automata object of a given dimension with random value from 0-1. See related initialize_ functions to initialize properly.
         ---------------
         Parameters:
             dim = cellular automata matrix shape
@@ -29,10 +29,54 @@ class CA_2D:
         self.cells = np.random.random(dim)
         self.rm = RuleManager()
         self.update_neighbors()
+        print("You initialized a 3D-CA with Moore neighborhood")
 
-    def update_neighbors(self):
-        raise NotImplementedError("This is the base class; Please choose a CA with defined neighborhood:\n VON_CA_t, VON_CA, MOORE_CA_t, MOORE_CA")
+    def update_neighbors(self): 
 
+        self.neighbors={}
+        self.n2 = np.roll(self.cells, 1, axis=0)
+        self.n2[0,:] = 0
+        self.n1 = np.roll(self.n2, 1, axis=1)
+        self.n1[0,:] = 0
+        self.n1[:,0] = 0
+        self.n3 = np.roll(self.n2, -1, axis=1)
+        self.n3[0,:] = 0
+        self.n3[:,-1] = 0
+
+        self.n4 = np.roll(self.cells, 1, axis=1)
+        self.n4[:,0] = 0
+        self.n5 = np.roll(self.cells, -1, axis=1)
+        self.n5[:,-1] = 0
+
+        self.n7 = np.roll(self.cells, -1, axis=0)
+        self.n7[-1,:] = 0
+        self.n7[:,0] = 0
+
+        self.n6 = np.roll(self.n7, 1, axis=1)
+        self.n6[-1,:] = 0
+
+        self.n8 = np.roll(self.n7, -1, axis=1)
+        self.n8[-1,:] = 0
+        self.n8[:,-1] = 0
+
+        self.neighbors['top-left'] = self.n1
+        self.neighbors['top'] = self.n2
+        self.neighbors['top-right'] = self.n3
+        self.neighbors['left'] = self.n4
+        self.neighbors['right'] = self.n5
+        self.neighbors['bottom-left'] = self.n6
+        self.neighbors['bottom'] = self.n7
+        self.neighbors['bottom-right'] = self.n8
+
+        keys = list(self.neighbors)
+        for i in [-1,1]:
+            for key in keys:
+                self.neighbors[key+str(i)] = np.roll(self.neighbors[key], shift=i, axis=2)
+
+        self.neighbors['direct-left'] = np.roll(self.cells, shift =1, axis=2)
+        self.neighbors['direct-right'] = np.roll(self.cells, shift =-1, axis=2)
+        #print("The number of neighbors is, ", len(self.neighbors.keys()))
+       
     def evolve(self):
         """
         Evolves the CA according to the rule applied.
@@ -116,6 +160,20 @@ class CA_2D:
         """
         self.rm.reset_rule()
 
+    def try_3d_animate(self):
+        self.rm.set_game_of_life()
+
+        fig = plt.figure()
+        pass 
+
+        ani = animation.FuncAnimation(fig, self.update_fig, interval=50, blit=True)
+        plt.show()
+
+        self.rm.reset_rule()
+
+        if savefig:
+            ani.save('GameOfLife.mp4')
+
     def animate_game_of_life(self, cmap='plasma', savefig=False):
         self.rm.set_game_of_life()
 
@@ -149,92 +207,7 @@ class CA_2D:
         return self.im,
 
     def cell(self):
-        return self.cells
-
-class MOORE_CA_t(CA_2D):
-    def __init__(self, dim):
-        CA_2D.__init__(self, dim)
-        self.neighborhood = "Toroidal Moore"
-        print("You created a toroidal CA with Moore neighborhood")
-
-    def update_neighbors(self):
-        n2 = np.roll(self.cells, 1, axis=0)
-        n1 = np.roll(n2, 1, axis=1)
-        n3 = np.roll(n2, -1, axis=1)
-        n4 = np.roll(self.cells, 1, axis=1)
-        n5 = np.roll(self.cells, -1, axis=1)
-        n7 = np.roll(self.cells, -1, axis=0)
-        n6 = np.roll(n7, 1, axis=1)
-        n8 = np.roll(n7, -1, axis=1)
-
-        self.neighbors = {}
-        self.neighbors['top-left'] = n1
-        self.neighbors['top'] = n2
-        self.neighbors['top-right'] = n3
-        self.neighbors['left'] = n4
-        self.neighbors['right'] = n5
-        self.neighbors['bottom-left'] = n6
-        self.neighbors['bottom'] = n7
-        self.neighbors['bottom-right'] = n8
+        print(self.cells[:][:][0])
+        return self.cells[:][:][0]
 
 
-class VON_CA_t(CA_2D):
-    def __init__(self, dim):
-        CA_2D.__init__(self, dim)
-        self.neighborhood = "Toroidal Von Neumann"
-        print("You created a toroidal CA with Von Neumann neighborhood")
-
-    def update_neighbors(self):
-        self.n1 = np.roll(self.cells, 1, axis=0)
-        self.n2 = np.roll(self.cells, 1, axis=1)
-        self.n3 = np.roll(self.cells, -1, axis=1)
-        self.n4 = np.roll(self.cells, -1, axis=0)
-
-class MOORE_CA(CA_2D):
-    def __init__(self, dim):
-        CA_2D.__init__(self, dim)
-        self.neighborhood = "Toroidal Moore"
-        print("You created a NON-Toroidal CA with Moore neighborhood")
-
-    def update_neighbors(self):
-        self.n2 = np.roll(self.cells, 1, axis=0)
-        self.n2[0,:] = 0
-        self.n1 = np.roll(self.n2, 1, axis=1)
-        self.n1[0,:] = 0
-        self.n1[:,0] = 0
-        self.n3 = np.roll(self.n2, -1, axis=1)
-        self.n3[0,:] = 0
-        self.n3[:,-1] = 0
-
-        self.n4 = np.roll(self.cells, 1, axis=1)
-        self.n4[:,0] = 0
-        self.n5 = np.roll(self.cells, -1, axis=1)
-        self.n5[:,-1] = 0
-
-        self.n7 = np.roll(self.cells, -1, axis=0)
-        self.n7[-1,:] = 0
-        self.n7[:,0] = 0
-
-        self.n6 = np.roll(self.n7, 1, axis=1)
-        self.n6[-1,:] = 0
-
-        self.n8 = np.roll(self.n7, -1, axis=1)
-        self.n8[-1,:] = 0
-        self.n8[:,-1] = 0
-
-
-class VON_CA(CA_2D):
-    def __init__(self, dim):
-        CA_2D.__init__(self, dim)
-        self.neighborhood = "Toroidal Von Neumann"
-        print("You created a NON-Toroidal CA with Von Neumann neighborhood")
-
-    def update_neighbors(self):
-        self.n1 = np.roll(self.cells, 1, axis=0)
-        self.n1[0,:] = 0
-        self.n2 = np.roll(self.cells, 1, axis=1)
-        self.n2[:,0] = 0
-        self.n3 = np.roll(self.cells, -1, axis=1)
-        self.n3[:,-1] = 0
-        self.n4 = np.roll(self.cells, -1, axis=0)
-        self.n4[-1,:] = 0
