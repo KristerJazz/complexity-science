@@ -251,5 +251,3 @@ class VON_CA(CA_2D):
         self.neighbors['left'] = n2
         self.neighbors['right'] = n3
         self.neighbors['bottom'] = n4
-
-
