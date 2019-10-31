@@ -3,9 +3,17 @@ import numpy as np
 class RuleManager:
     def __init__(self):
         self.rules = []
+        self.default = 0
 
     def add_rule(self, rule_object):
         self.rules.append(rule_object)
+
+    def set_default(self, rule_object):
+        self.default = rule_object
+
+    def add_default(self):
+        if self.default:
+            self.add_rule(self.default)
 
     def reset_rule(self):
         self.rules = []
@@ -22,12 +30,6 @@ class RuleManager:
             if j==1:
                 self.rules.append(wolfram_options[i])
 
-    def set_brians_brain(self):
-        self.add_rule(BriansBrain())
-
-    def set_game_of_life(self):
-        self.add_rule(GameOfLife())
-    
     def _bin_convert(self, rule_num):
         return format(rule_num, '08b')
 
@@ -210,44 +212,3 @@ class BriansBrain:
         result += current_state
         result += np.logical_and(zero, two_1).astype(int)
         return result
-
-###DEPRECATED###
-"""
-class RuleManager1D(RuleManager):
-    def __init__(self):
-        RuleManager.__init__()
-
-    def set_rule(self, number):
-        wolfram_options = [Bit128(), Bit64(), Bit32(), Bit16(),
-                           Bit8(), Bit4(), Bit2(), Bit1()]
-
-        rule_in_binary = self._bin_convert(number)
-
-        rule = np.array([int(x) for x in list(rule_in_binary)]) 
-        
-        for i, j in enumerate(rule):
-            if j==1:
-                self.rules.append(wolfram_options[i])
-    
-    def _bin_convert(self, rule_num):
-        return format(rule_num, '08b')
-
-    def apply(self, current, left, right):
-        result = np.zeros(len(current), dtype=int)
-        for rule in self.rules:
-            result += rule.apply(current, left, right)
-        return result
-
-
-class RuleManager2D(RuleManager):
-    def __init__(self):
-        RuleManager.__init__()
-
-    def apply(self, current, left, right):
-        result = np.zeros(len(current), dtype=int)
-        for rule in self.rules:
-            result += rule.apply(current, left, right)
-        return result
-"""
-
-
