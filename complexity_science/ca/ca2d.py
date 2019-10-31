@@ -103,6 +103,18 @@ class CA_2D:
         self.cells = np.random.randint(min_value, max_value, size=self.size)  
         self.update_neighbors()
         
+    def set_default(self, rule_object):
+        """
+        Sets the default rule for animation of the object
+        -------------
+        Parameters:
+            rule_object : An instance of a rule object that has an appropriate functions to update the cells for animation.
+        -------------
+        Returns
+            None: Updates default rule
+        """
+        self.rm.set_default(rule_object)
+
     def add_rule(self, rule_object):
         """
         Add the rule object to the rule manager.
@@ -117,7 +129,7 @@ class CA_2D:
         self.rm.reset_rule()
 
     def animate_game_of_life(self, cmap='plasma', savefig=False):
-        self.rm.set_game_of_life()
+        self.rm.add_default()
 
         fig = plt.figure()
         self.im = plt.imshow(self.cell(), cmap=cmap ,animated=True)
@@ -142,6 +154,18 @@ class CA_2D:
 
         if savefig:
             ani.save('BriansBrain.mp4')
+
+    def animate(self, cmap='plasma', savefig=False):
+        self.rm.add_default() 
+        fig = plt.figure()
+        self.im = plt.imshow(self.cell(), cmap=cmap, animated=True)
+
+        ani = animation.FuncAnimation(fig, self.update_fig, interval=50, blit=True)
+        plt.show()
+        self.rm.reset_rule()
+
+        if savefig:
+            ani.save('Animation.mp4')
 
     def update_fig(self, *args):
         self.cells = self.evolve()
