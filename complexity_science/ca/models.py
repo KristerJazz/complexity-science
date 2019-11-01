@@ -35,3 +35,9 @@ def mpa(dim, toroidal=True):
 
     model.initialize_random()
 
+def applause(dim, simple=True):
+    if simple:
+        model = Simple_CA(dim)
+
+    model.initialize_random_bin(1)
+    return model
