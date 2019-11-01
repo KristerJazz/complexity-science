@@ -75,7 +75,7 @@ class CA_2D:
 
     def initialize_random(self):
         """
-        Initializes the ca randomly with random values from 0 to 1
+        Initializes the CA randomly with random values from 0 to 1
 
         Automatically updates neighbors after initialization
         -------------
@@ -83,6 +83,18 @@ class CA_2D:
             None : Updates the cell with initialized values
         """
         self.cells = np.random.random(self.size)
+        self.update_neighbors()
+
+     def initialize_zero(self):
+        """
+        Initializes the CA with zeros 
+
+        Automatically updates neighbors after initialization
+        -------------
+        Returns:
+            None : Updates the cell with initialized values
+        """
+        self.cells = np.zeros(self.size)
         self.update_neighbors()
  
     def initialize_random_int(self, min_value, max_value):
@@ -251,3 +263,11 @@ class VON_CA(CA_2D):
         self.neighbors['left'] = n2
         self.neighbors['right'] = n3
         self.neighbors['bottom'] = n4
+
+class Simple_CA(CA_2D):
+    def __init__(self, dim):
+        CA_2D.__init__(self,dim)
+        self.neighborhood = "Toroidal 2D-CA"
+        self.neighbors = {}
+    def update_neighbors(self):
+        pass
