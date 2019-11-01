@@ -85,10 +85,9 @@ class CA_2D:
         self.cells = np.random.random(self.size)
         self.update_neighbors()
 
-     def initialize_zero(self):
+    def initialize_zero(self):
         """
-        Initializes the CA with zeros 
-
+        Initializes the CA with zeros
         Automatically updates neighbors after initialization
         -------------
         Returns:
@@ -269,5 +268,6 @@ class Simple_CA(CA_2D):
         CA_2D.__init__(self,dim)
         self.neighborhood = "Toroidal 2D-CA"
         self.neighbors = {}
+
     def update_neighbors(self):
         pass
