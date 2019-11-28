@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from .rules import RuleManager
+from .rule_manager import RuleManager
 
 
-class CA_2D:
+class CA2D:
     def __init__(self, dim):
         """
         Creates an 2D cellular automata object of a given dimension with random value from 0-1. See related initialize_ functions to initialize properly.
@@ -159,9 +159,9 @@ class CA_2D:
     def cell(self):
         return self.cells
 
-class MOORE_CA_t(CA_2D):
+class MooreCA_t(CA2D):
     def __init__(self, dim):
-        CA_2D.__init__(self, dim)
+        CA2D.__init__(self, dim)
         self.neighborhood = "Toroidal Moore"
         print("You created a toroidal CA with Moore neighborhood")
 
@@ -186,9 +186,9 @@ class MOORE_CA_t(CA_2D):
         self.neighbors['bottom-right'] = n8
 
 
-class VON_CA_t(CA_2D):
+class VonCA_t(CA2D):
     def __init__(self, dim):
-        CA_2D.__init__(self, dim)
+        CA2D.__init__(self, dim)
         self.neighborhood = "Toroidal Von Neumann"
         print("You created a toroidal CA with Von Neumann neighborhood")
 
@@ -199,9 +199,9 @@ class VON_CA_t(CA_2D):
         self.neighbors['right'] = np.roll(self.cells, -1, axis=1)
         self.neighbors['bottom'] = np.roll(self.cells, -1, axis=0)
 
-class MOORE_CA(CA_2D):
+class MooreCA(CA2D):
     def __init__(self, dim):
-        CA_2D.__init__(self, dim)
+        CA2D.__init__(self, dim)
         self.neighborhood = "Toroidal Moore"
         print("You created a NON-Toroidal CA with Moore neighborhood")
 
@@ -241,9 +241,9 @@ class MOORE_CA(CA_2D):
         self.neighbors['bottom'] = n7
         self.neighbors['bottom-right'] = n8
 
-class VON_CA(CA_2D):
+class VonCA(CA2D):
     def __init__(self, dim):
-        CA_2D.__init__(self, dim)
+        CA2D.__init__(self, dim)
         self.neighborhood = "Toroidal Von Neumann"
         print("You created a NON-Toroidal CA with Von Neumann neighborhood")
 
@@ -263,9 +263,9 @@ class VON_CA(CA_2D):
         self.neighbors['right'] = n3
         self.neighbors['bottom'] = n4
 
-class Simple_CA(CA_2D):
+class SimpleCA(CA2D):
     def __init__(self, dim):
-        CA_2D.__init__(self,dim)
+        CA2D.__init__(self,dim)
         self.neighborhood = "Toroidal 2D-CA"
         self.neighbors = {}
 
