@@ -95,7 +95,7 @@ class CA1D():
         self.cells = (np.random.random(self.num_cells)>ratio).astype(int) 
         self.update_neighbors()
 
-    def initialize_zero(self):
+    def reset(self):
         """
         Initializes the cells with zero values
         -------------
