@@ -1,4 +1,4 @@
-from .ca1d import *
+from .ca.ca1d import *
 from .rules1d.wolfram import Wolfram 
 
 def wolfram(N, rule_numbers, toroidal=True):
