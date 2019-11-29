@@ -198,7 +198,7 @@ class VonCA_t(CA2D):
 class MooreCA(CA2D):
     def __init__(self, dim):
         CA2D.__init__(self, dim)
-        self.neighborhood = "Toroidal Moore"
+        self.neighborhood = "Non-toroidal Moore"
         print("You created a NON-Toroidal CA with Moore neighborhood")
 
     def update_neighbors(self):
@@ -240,7 +240,7 @@ class MooreCA(CA2D):
 class VonCA(CA2D):
     def __init__(self, dim):
         CA2D.__init__(self, dim)
-        self.neighborhood = "Toroidal Von Neumann"
+        self.neighborhood = "Non-toroidal Von Neumann"
         print("You created a NON-Toroidal CA with Von Neumann neighborhood")
 
     def update_neighbors(self):
