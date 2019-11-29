@@ -59,7 +59,6 @@ class CA2D:
 
         #Dont forget to update neighbors after evolution
         self.update_neighbors()
-
         return new_state
 
     def initialize_random_bin(self, ratio):
@@ -71,7 +70,7 @@ class CA2D:
         Returns:
             None : Updates the cell with initialized values
         """
-        self.cells = (np.random.random(self.size) > ratio).astype(int) 
+        self.cells = (ratio > np.random.random(self.size)).astype(int) 
         self.update_neighbors()
 
     def initialize_random(self):
@@ -146,7 +145,7 @@ class CA2D:
         fig = plt.figure()
         self.im = plt.imshow(self.cells, cmap=cmap, animated=True)
 
-        ani = animation.FuncAnimation(fig, self._update_fig, interval=50, blit=True)
+        ani = animation.FuncAnimation(fig, self._update_fig, interval=100, blit=True)
         plt.show()
 
         if savefig:
@@ -262,7 +261,7 @@ class VonCA(CA2D):
 
 class SimpleCA(CA2D):
     def __init__(self, dim):
-        CA2D.__init__(self,dim)
+        CA2D.__init__(self, dim)
         self.neighborhood = "Toroidal 2D-CA"
         self.neighbors = {}
 
