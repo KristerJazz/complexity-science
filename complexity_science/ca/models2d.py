@@ -27,6 +27,27 @@ def game(dim, toroidal=True, default=True):
     model.initialize_random_bin(0.5)
     return model
 
+def applause(dim, rule_object='default', simple=True):
+    if simple:
+        model = MooreCA_t(dim)
+
+    if (rule_object=='default'):
+        params = {}
+        params['a'] = 0.5
+        params['b'] = 0.3
+        params['alpha'] = 1
+        params['beta'] = 5
+
+        print('Applause rule is set')
+        model.set_rule(Applause(params))
+    else:
+        model.set_rule(rule_object)
+
+    model.initialize_random_bin(0.9)
+        print(self.cells)
+
+    return model
+
 def mpa(dim, toroidal=True, params=None):
     if toroidal:
         model = VonCA_t(dim)
@@ -35,17 +56,7 @@ def mpa(dim, toroidal=True, params=None):
 
     #if params:
     #    model.
-    return model
-
     model.initialize_random()
-
-def applause(dim, rule_object='default', simple=True):
-    if simple:
-        model = SimpleCA(dim)
-
-    if 'default':
-        #model.set_rule()
-        pass
-
-    model.initialize_random_bin(1)
     return model
+
+
