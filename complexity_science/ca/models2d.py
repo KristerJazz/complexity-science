@@ -50,18 +50,8 @@ def mpa(dim, rule_object='default', percent_mpa=0, toroidal=True, **kwargs):
     else:
         model = VonCA(dim)
 
-    if not percent_mpa:
-        gammafield = np.ones(dim)
-    else:
-        x, y = dim
-        mpa_x = int(percent_mpa*x)
-        mpa_y = int(percent_mpa*y)
-
-        gammafield = np.ones(dim)
-        gammafield[0:mpa_x, 0:mpa_y] = 0
-
     if rule_object=='default':
-        model.set_rule(MPA(gammafield, **kwargs))
+        model.set_rule(MPA(dim, percent_mpa, **kwargs))
     else:
         model.set_rule(rule_object)
 
