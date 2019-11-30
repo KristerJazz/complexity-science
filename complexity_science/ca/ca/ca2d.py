@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from .rule_manager import RuleManager
+from .data_collector import DataCollector
 
 
 class CA2D:
@@ -28,7 +29,6 @@ class CA2D:
         self.size = dim
         self.cells = np.random.random(dim)
         self.rm = RuleManager()
-        #self.dc = DataCollector()
         self.update_neighbors()
 
     def update_neighbors(self):
@@ -170,9 +170,34 @@ class CA2D:
         """
         self.rm.modify_rule(**kwargs)
     
-    #def run(self, iteration, collector=None):
+    def run_collect(self, iteration, collector=['mean'], steady_state=False, custom_function=[]):
+        """
+        Run evolution according to the number of iteration
+        -------------
+        Parameters:
+            iteration = number of iteration
+            collector = data reduction (sum, mean, max, min, std, etc)
+        """
+        dc = DataCollector(collector, custom_function)
+
+        if steady_state:
+            for i in range(iteration):
+                result = self.evolve()
+            dc.collect(result)
+        else:
+            for i in range(iteration):
+                result = self.evolve()
+                dc.collect(result)
+
+        return dc.data
 
     def animate(self, num_frames='all', cmap='plasma', savefig=False):
+        """
+        Run animation
+        ------------
+        Parameters
+            Animation parameters
+        """
         fig = plt.figure()
         self.im = plt.imshow(self.cells, cmap=cmap, animated=True)
 
@@ -189,6 +214,7 @@ class CA2D:
     def _update_fig(self, *args):
         self.im.set_array(self.evolve())
         return self.im,
+
 
 class MooreCA_t(CA2D):
     def __init__(self, dim):
@@ -229,6 +255,7 @@ class VonCA_t(CA2D):
         self.neighbors['left'] = np.roll(self.cells, 1, axis=1)
         self.neighbors['right'] = np.roll(self.cells, -1, axis=1)
         self.neighbors['bottom'] = np.roll(self.cells, -1, axis=0)
+
 
 class MooreCA(CA2D):
     def __init__(self, dim):
@@ -272,6 +299,7 @@ class MooreCA(CA2D):
         self.neighbors['bottom'] = n7
         self.neighbors['bottom-right'] = n8
 
+
 class VonCA(CA2D):
     def __init__(self, dim):
         CA2D.__init__(self, dim)
@@ -293,6 +321,7 @@ class VonCA(CA2D):
         self.neighbors['left'] = n2
         self.neighbors['right'] = n3
         self.neighbors['bottom'] = n4
+
 
 class SimpleCA(CA2D):
     def __init__(self, dim):
