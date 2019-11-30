@@ -161,14 +161,14 @@ class CA2D:
         """
         self.rm.reset_rule()
 
-    def modify_parameters(**kwargs):
+    def modify_rule(self, **kwargs):
         """
         Removes all the rule from RuleManager
         -------------
         Returns
             None: Modify parameters of rules in rule manager
         """
-        self.rm.modify_params(**kwargs)
+        self.rm.modify_rule(**kwargs)
     
     #def run(self, iteration, collector=None):
 
