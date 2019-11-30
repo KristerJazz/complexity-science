@@ -63,7 +63,7 @@ class CA2D:
 
     def initialize_random_bin(self, ratio):
         """
-        Initializes the ca randomly with a approximated ratio of 1 and 0 
+        Initializes the ca randomly with a approximated ratio of 1s and 0s 
 
         Automatically updates neighbors after initialization
         -------------
@@ -94,6 +94,22 @@ class CA2D:
             None : Updates the cell with initialized values
         """
         self.cells = np.zeros(self.size)
+        self.update_neighbors()
+
+     def initialize_index(self, tuple_index, value):
+        """
+        Initializes an index in the CA with a certain value and 0 for all the rest
+        Automatically updates neighbors after initialization
+        -------------
+        Parameters:
+            tuple_index : index on the matrix as tuple
+            value : value of the initialization
+        -------------
+        Returns:
+            None : Updates the cell with initialized values
+        """
+        self.cells = np.zeros(self.size)
+        self.cells[index] = value
         self.update_neighbors()
  
     def initialize_random_int(self, min_value, max_value):
