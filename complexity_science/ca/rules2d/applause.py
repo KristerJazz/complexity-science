@@ -1,11 +1,27 @@
 import numpy as np
 
 class Applause:
-    def __init__(self, params):
-        self.a = params['a'] 
-        self.b = params['b']
-        self.alpha = params['alpha']
-        self.beta = params['beta']
+    def __init__(self, **kwargs):
+        """
+        Initialize an applause rule with default parameters
+        ------
+        Parameters:
+            a = ;
+            b = ;
+            alpha = ;
+            beta = ;
+        """
+        self.default = {'a':0.5, 'b':0.3, 'alpha':1, 'beta':5}
+        self.update_parameters(**kwargs)
+
+    def update_parameters(self, **kwargs):
+        for key, value in kwargs.items():
+            self.default[key] = value
+
+        self.a = self.default['a'] 
+        self.b = self.default['b']
+        self.alpha = self.default['alpha'] 
+        self.beta = self.default['beta'] 
 
     def apply(self, current, neighbors):
         state0 = (current==0)
