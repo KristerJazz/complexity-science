@@ -49,6 +49,5 @@ class MPA:
         #HARVEST
         harvest = self.gammafield*self.dt*np.exp(self.beta*np.log(current))
         result -= harvest
-        
-        #print(self.gammafield)
+
         return result
