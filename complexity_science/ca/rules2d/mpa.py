@@ -40,8 +40,8 @@ class MPA:
             self.gammafield = np.ones(dim)*self.gamma
         else:
             x, y = self.dim
-            mpa_x = int(self.percent*x)
-            mpa_y = int(self.percent*y)
+            mpa_x = int(np.sqrt((x*y)*self.percent))
+            mpa_y = int(np.sqrt((x*y)*self.percent))
 
             self.gammafield = np.ones(self.dim)*self.gamma
             self.gammafield[0:mpa_x, 0:mpa_y] = 0
