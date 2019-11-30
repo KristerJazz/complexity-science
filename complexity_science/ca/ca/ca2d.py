@@ -138,7 +138,7 @@ class CA2D:
             rule_object : An instance of a rule object that has an appropriate functions to update the cells for animation.
         -------------
         Returns
-            None: Updates default rule
+            None: Set default rule in rule manager 
         """
         self.rm.set_rule(rule_object)
 
@@ -146,23 +146,42 @@ class CA2D:
         """
         Add the rule object to the rule manager.
         This rule will apply for every evolve() function call.
+        -------------
+        Returns
+            None: Add rule to rule manager
         """
         self.rm.add_rule(rule_object) 
 
     def reset_rule(self):
         """
-        Resets the rule list from RuleManager
+        Removes all the rule from RuleManager
+        -------------
+        Returns
+            None: Removes rules in rule manager
         """
         self.rm.reset_rule()
+
+    def modify_parameters(**kwargs):
+        """
+        Removes all the rule from RuleManager
+        -------------
+        Returns
+            None: Modify parameters of rules in rule manager
+        """
+        self.rm.modify_params(**kwargs)
     
     #def run(self, iteration, collector=None):
 
-    def animate(self, cmap='plasma', savefig=False):
+    def animate(self, num_frames='all', cmap='plasma', savefig=False):
         fig = plt.figure()
         self.im = plt.imshow(self.cells, cmap=cmap, animated=True)
 
-        ani = animation.FuncAnimation(fig, self._update_fig, interval=100, blit=True)
-        plt.show()
+        if num_frames=='all':
+            ani = animation.FuncAnimation(fig, self._update_fig, interval=100, blit=True)
+            plt.show()
+        else:
+            ani = animation.FuncAnimation(fig, self._update_fig, interval=100, blit=True, frames=num_frames, repeat=False)
+            plt.show()
 
         if savefig:
             ani.save('Animation.mp4')
