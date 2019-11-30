@@ -13,6 +13,10 @@ class RuleManager:
 
     def set_rule(self, rule_object):
         self.rules.append(rule_object)
+
+    def modify_rule(self, **kwargs):
+        for rule in self.rules:
+            rule.update_parameters(**kwargs)
         
     def apply(self, current, neighbors_dict):
         result = current.copy() 
