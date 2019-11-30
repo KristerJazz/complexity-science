@@ -1,7 +1,7 @@
 import numpy as np
 
 class MPA:
-    def __init__(self, gammafield, **kwargs):
+    def __init__(self, dim, percent_mpa, **kwargs):
         """
         Initializes an logistic growth, harvest and diffusion rule to an marine area;
         with protected regions also known as MPAs.
@@ -17,11 +17,11 @@ class MPA:
         """
         self.default = {'dt' : 0.01,
                         'beta' : 1,
-                        'D' : 25
+                        'D' : 25,
+                        'gamma' : 1
                         }
-        self.default['gammafield'] = gammafield
-        self.gammafield = gammafield
-
+        self.dim = dim
+        self.default['percent_mpa'] = percent_mpa
         self.update_parameters(**kwargs)
 
     def update_parameters(self, **kwargs):
@@ -30,10 +30,21 @@ class MPA:
 
         self.dt = self.default['dt']
         self.beta = self.default['beta']
+        self.gamma = self.default['gamma']
         self.D = self.default['D']
-        self.gammafield = self.default['gammafield'] 
+        self.percent = self.default['percent_mpa']
 
         self.alpha = self.D*self.dt 
+
+        if not self.percent:
+            self.gammafield = np.ones(dim)*self.gamma
+        else:
+            x, y = self.dim
+            mpa_x = int(self.percent*x)
+            mpa_y = int(self.percent*y)
+
+            self.gammafield = np.ones(self.dim)*self.gamma
+            self.gammafield[0:mpa_x, 0:mpa_y] = 0
 
     def apply(self, current, neighbors):
         #DIFFUSION
