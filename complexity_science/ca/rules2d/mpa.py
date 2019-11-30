@@ -37,7 +37,7 @@ class MPA:
         self.alpha = self.D*self.dt 
 
         if not self.percent:
-            self.gammafield = np.ones(dim)*self.gamma
+            self.gammafield = np.ones(self.dim)*self.gamma
         else:
             x, y = self.dim
             mpa_x = int(np.sqrt((x*y)*self.percent))
