@@ -96,7 +96,7 @@ class CA2D:
         self.cells = np.zeros(self.size)
         self.update_neighbors()
 
-     def initialize_index(self, tuple_index, value):
+    def initialize_index(self, tuple_index, value):
         """
         Initializes an index in the CA with a certain value and 0 for all the rest
         Automatically updates neighbors after initialization
