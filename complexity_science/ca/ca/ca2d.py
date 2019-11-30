@@ -188,8 +188,8 @@ class CA2D:
             for i in range(iteration):
                 result = self.evolve()
                 dc.collect(result)
+            dc.data_to_pd()
 
-        dc.data_to_pd()
         return dc.data
 
     def animate(self, num_frames='all', cmap='plasma', savefig=False):
