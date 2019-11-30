@@ -2,20 +2,21 @@ import numpy as np
 import pandas as pd
 
 class DataCollector:
-    def __init__(self, collector=['mean'], custom_function=[]):
-        self.data = "Nice"#pd.DataFrame() 
+    def __init__(self, collector):
+        self.data = []
         self.flist = []
-
-        if 'mean' in collector:
-            self.flist.append(np.average)
-        if 'min' in collector:
-            self.flist.append(np.amin)
-        if 'max' in collector:
-            self.flist.append(np.amax)
-        if custom_function:
-            for f in custom_function:
-                self.flist.append(f)
+        self.columns = []
+        
+        for key, f in collector.items():
+            self.flist.append(f)
+            self.columns.append(key)
 
     def collect(self, array):
+        collected = [] 
         for f in self.flist:
-            f(array)
+            collected.append(f(array))
+        self.data.append(collected)
+
+    def data_to_pd(self):
+        self.data = pd.DataFrame(self.data, columns = self.columns)
+        return self.data
