@@ -170,7 +170,7 @@ class CA2D:
         """
         self.rm.modify_rule(**kwargs)
     
-    def run_collect(self, iteration, collector=['mean'], steady_state=False, custom_function=[]):
+    def run_collect(self, iteration, steady_state=False, collector = {'mean':np.average}):
         """
         Run evolution according to the number of iteration
         -------------
@@ -178,7 +178,7 @@ class CA2D:
             iteration = number of iteration
             collector = data reduction (sum, mean, max, min, std, etc)
         """
-        dc = DataCollector(collector, custom_function)
+        dc = DataCollector(collector)
 
         if steady_state:
             for i in range(iteration):
@@ -189,6 +189,7 @@ class CA2D:
                 result = self.evolve()
                 dc.collect(result)
 
+        dc.data_to_pd()
         return dc.data
 
     def animate(self, num_frames='all', cmap='plasma', savefig=False):
