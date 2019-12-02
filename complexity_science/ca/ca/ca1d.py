@@ -1,17 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .rules import RuleManager
+from .rule_manager import RuleManager
 
-class CA_1D():
+class CA1D():
     def __init__(self, N):
         """
         Creates an uninitialized 1D cellular automata object with length N
         -------------
         Parameters:
             N = number of cells
-        n1 : left neighbor
-        n2 : right neighbor
+            n1 : left neighbor
+            n2 : right neighbor
         ------------- 
         Returns:
             None
@@ -23,18 +23,11 @@ class CA_1D():
 
     def update_neighbors(self):
         """
-        Update the neighbor values
-            n1 : left neighbor
-            n2 : right neighbor
-        -------------
-        Returns:
-            None
+        Updates the neighbor dictionary according to the neighborhood
         """
-        self.neighbors = {}
-        self.neighbors['left'] = np.roll(self.cells, 1)
-        self.neighbors['right'] = np.roll(self.cells, -1)
+        raise NotImplementedError("This is the base 1D CA class; please use a CA with predetermined neighborhood; SimpleCA, CA_nt, CA_t.")
 
-    def set_wolfram_rule(self, rule_number):
+    def set_rule(self, rule_object):
         """
         Sets the CA rule to a wolfram rule number
         -------------
@@ -44,7 +37,7 @@ class CA_1D():
         Returns:
             None
         """
-        self.rm.set_rule(rule_number)
+        self.rm.set_rule(rule_object)
 
     def evolve(self):
         """
@@ -102,7 +95,7 @@ class CA_1D():
         self.cells = (np.random.random(self.num_cells)>ratio).astype(int) 
         self.update_neighbors()
 
-    def initialize_zero(self):
+    def reset(self):
         """
         Initializes the cells with zero values
         -------------
@@ -124,20 +117,17 @@ class CA_1D():
         self.cells = np.random.random(self.num_cells) 
         self.update_neighbors()
 
-    def run_wolfram_rule(self, rule_number, iterations, show_figure=True):
+    def run(self, iterations, show_figure=True):
         """
         Run cellular automata according to the wolfram rule_number assigned.
         -------------
         Parameters:
-            rule_number = values from (0-255). Refer to wolfram's rule numbers
             iterations = number of times for the rule to be applied
             show_figure = Default is True, outputs the figure at run time
         -------------
         Returns:
             result = resulting N x iteration array of the CA evolution
         """
-        self.set_wolfram_rule(rule_number)
-        
         result = [self.cells]
         for i in range(iterations):
             result.append(self.evolve())
@@ -147,7 +137,6 @@ class CA_1D():
             plt.show()
         
         plt.clf()
-        self.reset_rule()
         return result
         
     def add_rule(self, rule_object):
@@ -162,3 +151,54 @@ class CA_1D():
         Resets the rule list from RuleManager
         """
         self.rm.reset_rule()
+
+class SimpleCA(CA1D):
+    def __init__(self, N):
+        CA1D.__init__(self, N)
+        self.neighborhood = "No neighbors are automatically considered"
+
+    def update_neighbors(self):
+        """
+        No neighors
+        """
+        pass
+
+class CA_t(CA1D):
+    def __init__(self, N):
+        CA1D.__init__(self, N)
+        self.neighborhood = "Two neighbors (left and right) are automatically considered"
+
+    def update_neighbors(self):
+        """
+        Update the neighbor values
+            n1 : left neighbor
+            n2 : right neighbor
+        -------------
+        Returns:
+            None
+        """
+        self.neighbors = {}
+        self.neighbors['left'] = np.roll(self.cells, 1)
+        self.neighbors['right'] = np.roll(self.cells, -1)
+
+class CA_nt(CA1D):
+    def __init__(self, N):
+        CA1D.__init__(self, N)
+        self.neighborhood = "Two neighbors (left and right) are automatically considered with non toroidal boundaries"
+
+    def update_neighbors(self):
+        """
+        Update the neighbor values
+            n1 : left neighbor
+            n2 : right neighbor
+        -------------
+        Returns:
+            None
+        """
+        self.neighbors = {}
+        left = np.roll(self.cells, 1)
+        left[0] = 0
+        right = np.roll(self.cells, -1)
+        right[-1] = 0
+        self.neighbors['left'] = left 
+        self.neighbors['right'] = right 

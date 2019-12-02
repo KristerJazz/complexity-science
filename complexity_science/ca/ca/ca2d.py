@@ -1,10 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from .rules import RuleManager
+from .rule_manager import RuleManager
+from .data_collector import DataCollector
 
 
-class CA_2D:
+class CA2D:
     def __init__(self, dim):
         """
         Creates an 2D cellular automata object of a given dimension with random value from 0-1. See related initialize_ functions to initialize properly.
@@ -58,24 +59,23 @@ class CA_2D:
 
         #Dont forget to update neighbors after evolution
         self.update_neighbors()
-
         return new_state
 
     def initialize_random_bin(self, ratio):
         """
-        Initializes the ca randomly with a approximated ratio of 1 and 0 
+        Initializes the ca randomly with a approximated ratio of 1s and 0s 
 
         Automatically updates neighbors after initialization
         -------------
         Returns:
             None : Updates the cell with initialized values
         """
-        self.cells = (np.random.random(self.size) > ratio).astype(int) 
+        self.cells = (ratio > np.random.random(self.size)).astype(int) 
         self.update_neighbors()
 
     def initialize_random(self):
         """
-        Initializes the ca randomly with random values from 0 to 1
+        Initializes the CA randomly with random values from 0 to 1
 
         Automatically updates neighbors after initialization
         -------------
@@ -83,6 +83,33 @@ class CA_2D:
             None : Updates the cell with initialized values
         """
         self.cells = np.random.random(self.size)
+        self.update_neighbors()
+
+    def initialize_zero(self):
+        """
+        Initializes the CA with zeros
+        Automatically updates neighbors after initialization
+        -------------
+        Returns:
+            None : Updates the cell with initialized values
+        """
+        self.cells = np.zeros(self.size)
+        self.update_neighbors()
+
+    def initialize_index(self, tuple_index, value):
+        """
+        Initializes an index in the CA with a certain value and 0 for all the rest
+        Automatically updates neighbors after initialization
+        -------------
+        Parameters:
+            tuple_index : index on the matrix as tuple
+            value : value of the initialization
+        -------------
+        Returns:
+            None : Updates the cell with initialized values
+        """
+        self.cells = np.zeros(self.size)
+        self.cells[index] = value
         self.update_neighbors()
  
     def initialize_random_int(self, min_value, max_value):
@@ -103,57 +130,96 @@ class CA_2D:
         self.cells = np.random.randint(min_value, max_value, size=self.size)  
         self.update_neighbors()
         
+    def set_rule(self, rule_object):
+        """
+        Sets the default rule for animation of the object
+        -------------
+        Parameters:
+            rule_object : An instance of a rule object that has an appropriate functions to update the cells for animation.
+        -------------
+        Returns
+            None: Set default rule in rule manager 
+        """
+        self.rm.set_rule(rule_object)
+
     def add_rule(self, rule_object):
         """
         Add the rule object to the rule manager.
         This rule will apply for every evolve() function call.
+        -------------
+        Returns
+            None: Add rule to rule manager
         """
         self.rm.add_rule(rule_object) 
 
     def reset_rule(self):
         """
-        Resets the rule list from RuleManager
+        Removes all the rule from RuleManager
+        -------------
+        Returns
+            None: Removes rules in rule manager
         """
         self.rm.reset_rule()
 
-    def animate_game_of_life(self, cmap='plasma', savefig=False):
-        self.rm.set_game_of_life()
+    def modify_rule(self, **kwargs):
+        """
+        Removes all the rule from RuleManager
+        -------------
+        Returns
+            None: Modify parameters of rules in rule manager
+        """
+        self.rm.modify_rule(**kwargs)
+    
+    def run_collect(self, iteration, steady_state=False, collector = {'mean':np.average}):
+        """
+        Run evolution according to the number of iteration
+        -------------
+        Parameters:
+            iteration = number of iteration
+            collector = data reduction (sum, mean, max, min, std, etc)
+        """
+        dc = DataCollector(collector)
 
+        if steady_state:
+            for i in range(iteration):
+                result = self.evolve()
+            dc.collect(result)
+        else:
+            for i in range(iteration):
+                result = self.evolve()
+                dc.collect(result)
+            dc.data_to_pd()
+
+        return dc.data
+
+    def animate(self, num_frames='all', cmap='plasma', savefig=False):
+        """
+        Run animation
+        ------------
+        Parameters
+            Animation parameters
+        """
         fig = plt.figure()
-        self.im = plt.imshow(self.cell(), cmap=cmap ,animated=True)
+        self.im = plt.imshow(self.cells, cmap=cmap, animated=True)
 
-        ani = animation.FuncAnimation(fig, self.update_fig, interval=50, blit=True)
-        plt.show()
-
-        self.rm.reset_rule()
+        if num_frames=='all':
+            ani = animation.FuncAnimation(fig, self._update_fig, interval=100, blit=True)
+            plt.show()
+        else:
+            ani = animation.FuncAnimation(fig, self._update_fig, interval=100, blit=True, frames=num_frames, repeat=False)
+            plt.show()
 
         if savefig:
-            ani.save('GameOfLife.mp4')
+            ani.save('Animation.mp4')
 
-    def animate_brians_brain(self, cmap='plasma', savefig=False):
-        self.rm.set_brians_brain()
-        fig = plt.figure()
-        self.im = plt.imshow(self.cell(), cmap=cmap, animated=True)
-
-        ani = animation.FuncAnimation(fig, self.update_fig, interval=50, blit=True)
-        plt.show()
-
-        self.rm.reset_rule()
-
-        if savefig:
-            ani.save('BriansBrain.mp4')
-
-    def update_fig(self, *args):
-        self.cells = self.evolve()
-        self.im.set_array(self.cell())
+    def _update_fig(self, *args):
+        self.im.set_array(self.evolve())
         return self.im,
 
-    def cell(self):
-        return self.cells
 
-class MOORE_CA_t(CA_2D):
+class MooreCA_t(CA2D):
     def __init__(self, dim):
-        CA_2D.__init__(self, dim)
+        CA2D.__init__(self, dim)
         self.neighborhood = "Toroidal Moore"
         print("You created a toroidal CA with Moore neighborhood")
 
@@ -178,9 +244,9 @@ class MOORE_CA_t(CA_2D):
         self.neighbors['bottom-right'] = n8
 
 
-class VON_CA_t(CA_2D):
+class VonCA_t(CA2D):
     def __init__(self, dim):
-        CA_2D.__init__(self, dim)
+        CA2D.__init__(self, dim)
         self.neighborhood = "Toroidal Von Neumann"
         print("You created a toroidal CA with Von Neumann neighborhood")
 
@@ -191,10 +257,11 @@ class VON_CA_t(CA_2D):
         self.neighbors['right'] = np.roll(self.cells, -1, axis=1)
         self.neighbors['bottom'] = np.roll(self.cells, -1, axis=0)
 
-class MOORE_CA(CA_2D):
+
+class MooreCA(CA2D):
     def __init__(self, dim):
-        CA_2D.__init__(self, dim)
-        self.neighborhood = "Toroidal Moore"
+        CA2D.__init__(self, dim)
+        self.neighborhood = "Non-toroidal Moore"
         print("You created a NON-Toroidal CA with Moore neighborhood")
 
     def update_neighbors(self):
@@ -233,10 +300,11 @@ class MOORE_CA(CA_2D):
         self.neighbors['bottom'] = n7
         self.neighbors['bottom-right'] = n8
 
-class VON_CA(CA_2D):
+
+class VonCA(CA2D):
     def __init__(self, dim):
-        CA_2D.__init__(self, dim)
-        self.neighborhood = "Toroidal Von Neumann"
+        CA2D.__init__(self, dim)
+        self.neighborhood = "Non-toroidal Von Neumann"
         print("You created a NON-Toroidal CA with Von Neumann neighborhood")
 
     def update_neighbors(self):
@@ -256,3 +324,11 @@ class VON_CA(CA_2D):
         self.neighbors['bottom'] = n4
 
 
+class SimpleCA(CA2D):
+    def __init__(self, dim):
+        CA2D.__init__(self, dim)
+        self.neighborhood = "Toroidal 2D-CA"
+        self.neighbors = {}
+
+    def update_neighbors(self):
+        pass
