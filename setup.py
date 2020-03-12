@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
         name = "complexity-science",
-        version = "0.0.3",
+        version = "0.0.4",
         author = "Krister Jazz Urog",
         author_email = "kristerjazz.urog@gmail.com",
         description = "A package for complexity science research",
@@ -21,6 +21,7 @@ setuptools.setup(
         python_requires = '>3.6',
         install_requires = [
             "numpy",
-            "matplotlib"
+            "matplotlib",
+            "pandas"
             ]
         )

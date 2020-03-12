@@ -4,6 +4,7 @@ from .rules2d.brians import *
 from .rules2d.game_of_life import *
 from .rules2d.applause import *
 from .rules2d.mpa import *
+from .rules2d.forest_fire import *
 
 def brians_brain(dim, toroidal=True, default=True):
     if toroidal:
@@ -57,3 +58,14 @@ def mpa(dim, rule_object='default', percent_mpa=0, toroidal=True, **kwargs):
 
     model.initialize_random()
     return model
+
+def forest_fire(dim, toroidal=True, **kwargs):
+	if toroidal:
+		model = VonCA_t(dim)
+	else:
+		model = VonCA_t(dim)
+	
+	model.set_rule(ForestFire(**kwargs))
+
+	model.initialize_random_bin(0.5)
+	return model
