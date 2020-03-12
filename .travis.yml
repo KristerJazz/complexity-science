@@ -4,5 +4,6 @@ install:
   - pip install .
 before_script:
   - cd complexity_science
+  - sudo apt install ffmpeg
 script:
   - python -m pytest
