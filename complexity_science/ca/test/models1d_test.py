@@ -1,4 +1,4 @@
-import ca.models1d
+#import ca.models1d
 
 def test_sample():
     pass
