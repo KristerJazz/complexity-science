@@ -3,4 +3,5 @@ language: python
 install:
   - pip install .
 script:
+  - cd complexity_science
   - pytest
