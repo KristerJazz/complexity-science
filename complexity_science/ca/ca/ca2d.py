@@ -192,7 +192,7 @@ class CA2D:
 
         return dc.data
 
-    def animate(self, num_frames='all', cmap='plasma', savefig=False):
+    def animate(self, num_frames='all', cmap='plasma', savefig=False, writer=animation.writers['ffmpeg']):
         """
         Run animation
         ------------
@@ -210,7 +210,13 @@ class CA2D:
             plt.show()
 
         if savefig:
-            ani.save('Animation.mp4')
+            ani.save('Animation.mp4', writer=writer)
+	
+    def jyp_anim(self, cmap='plasma'):
+        fig = plt.figure()
+        self.im = plt.imshow(self.cells, cmap=cmap, animated=True)
+        anim = animation.FuncAnimation(fig, self._update_fig, interval=100, blit=True)
+        return anim
 
     def _update_fig(self, *args):
         self.im.set_array(self.evolve())
