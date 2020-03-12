@@ -2,6 +2,8 @@ language: python
 
 install:
   - pip install .
-before_script: cd complexity_science
+before_script:
+  - cd complexity_science
+  - ls
 script:
   - pytest
