@@ -36,38 +36,15 @@ class CA_Network:
         new_state = self.rm.apply(self.cells, self.adj)
         self.cells = new_state
 
-
     def initialize_population(self, N, p=None):
-        self.cells[0,0] = 9000
-        self.cells[1,0] = 1000
-        self.cells[2,0] = 0
-        self.cells[3,0] = 0
-        #pop_sum = 0
-        #while pop_sum != N:
-        #    pop = np.random.random(self.size)
-        #    pop = np.round(pop*100/pop.sum())
-        #    pop_sum = pop.sum()
-
-        #if not p:
-        #    p = [1/self.heterogeneity]*self.heterogeneity
-
-        #total = 0
-        #for i in range(self.heterogeneity-1):
-        #    fraction = np.round(p[i]*pop)
-        #    self.cells[i] = fraction 
-        #    total += fraction
-        #self.cells[-1] = pop-total
-
-    def initialize_random_bin(self, ratio):
-        """
-        Initializes the ca randomly with a approximated ratio of 1s and 0s 
-
-        Automatically updates neighbors after initialization
-        -------------
-        Returns:
-            None : Updates the cell with initialized values
-        """
-        self.cells = (ratio > np.random.random(self.size)).astype(int) 
+        assert(len(p) == self.heterogeneity), "Probability distribution does not match heterogeneity"
+        p.insert(0,0)
+        for i in range(self.size):
+            population = np.random.random(N)
+            part = np.cumsum(p)
+            for j in range(len(part)-1):
+                number = (np.logical_and((population >= part[j]), population < part[j+1])).astype(int).sum()
+                self.cells[j,i] = number 
 
     def initialize_random(self):
         """
@@ -79,6 +56,7 @@ class CA_Network:
             None : Updates the cell with initialized values
         """
         self.cells = np.random.random(self.size)
+
     def initialize_zero(self):
         """
         Initializes the CA with zeros
@@ -120,6 +98,7 @@ class CA_Network:
             None : Updates the cell with initialized values
         """
         self.cells = np.random.randint(min_value, max_value, size=self.size)  
+
     def set_rule(self, rule_object):
         """
         Sets the default rule for animation of the object
