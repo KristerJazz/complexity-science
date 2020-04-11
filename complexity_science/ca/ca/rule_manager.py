@@ -12,6 +12,8 @@ class RuleManager:
         self.rules = []
 
     def set_rule(self, rule_object):
+        self.rules = []
+        "Set rule command deletes all previously added rules"
         self.rules.append(rule_object)
 
     def modify_rule(self, **kwargs):
@@ -25,4 +27,3 @@ class RuleManager:
             result = new_state
 
         return new_state 
-
