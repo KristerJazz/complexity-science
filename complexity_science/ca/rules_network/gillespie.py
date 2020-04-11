@@ -57,11 +57,14 @@ class SIRC_Gillespie:
     def apply(self, current, adj):
         for i in range(len(current[0])):
             prob = self.compute_prob(current[:,i])
-            r = prob/prob.sum()
-            choice = np.random.choice([0,1,2,3], p=r)
-            current[:,i] = current[:,i]+self.update_matrix[choice]
-
-        dt = (1/prob.sum()) * np.log(1/np.random.random())
+            if prob.sum()==0:
+                dt = 100
+                pass
+            else:
+                r = prob/prob.sum()
+                choice = np.random.choice([0,1,2,3], p=r)
+                current[:,i] = current[:,i]+self.update_matrix[choice]
+                dt = (1/prob.sum()) * np.log(1/np.random.random())
         self.t += dt
 
         return current
