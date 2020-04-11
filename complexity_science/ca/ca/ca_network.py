@@ -35,9 +35,14 @@ class CA_Network:
         """
         new_state = self.rm.apply(self.cells, self.adj)
         self.cells = new_state
+        return self.cells
 
-    def initialize_population(self, N, p=None):
-        assert(len(p) == self.heterogeneity), "Probability distribution does not match heterogeneity"
+    def initialize_population(self, N, p='random'):
+        if p == 'random':
+            pass
+        else:
+            assert(len(p) == self.heterogeneity), "Probability distribution does not match heterogeneity"
+
         p.insert(0,0)
         for i in range(self.size):
             population = np.random.random(N)
@@ -65,7 +70,7 @@ class CA_Network:
         Returns:
             None : Updates the cell with initialized values
         """
-        self.cells = np.zeros(self.size)
+        self.cells = np.zeros([self.heterogeneity, self.size])
 
     def initialize_index(self, tuple_index, value):
         """
@@ -79,7 +84,7 @@ class CA_Network:
         Returns:
             None : Updates the cell with initialized values
         """
-        self.cells = np.zeros(self.size)
+        self.cells = np.zeros([self.heterogeneity, self.size])
         self.cells[index] = value
  
     def initialize_random_int(self, min_value, max_value):
@@ -97,7 +102,7 @@ class CA_Network:
         Returns:
             None : Updates the cell with initialized values
         """
-        self.cells = np.random.randint(min_value, max_value, size=self.size)  
+        self.cells = np.random.randint(min_value, max_value, size=[self.heterogeneity,self.size])  
 
     def set_rule(self, rule_object):
         """
@@ -139,7 +144,7 @@ class CA_Network:
         """
         self.rm.modify_rule(**kwargs)
     
-    def run_collect(self, iteration, steady_state=False):#, collector = {'mean':np.average}):
+    def run_collect(self, iteration, steady_state=False, collector = {'all':0}):
         """
         Run evolution according to the number of iteration
         -------------
@@ -147,23 +152,20 @@ class CA_Network:
             iteration = number of iteration
             collector = data reduction (sum, mean, max, min, std, etc)
        """
-        T = iteration
-        t = 0
-        S = []
-        I = []
-        C = []
-        R = []
-        dt = []
-        while t < T and not(self.cells[2,0] == 0 and self.cells[1,0] == 0):
-            self.evolve()
-            t = self.rm.rules[0].t
-            S.append(self.cells[0,0])
-            I.append(self.cells[1,0])
-            C.append(self.cells[2,0])
-            R.append(self.cells[3,0])
-            dt.append(t)
+        dc = DataCollector(collector)
+        if steady_state:
+            raise NotImplementedError
+        else:
+            dt = []
+            t = 0
+            T = iteration
+            while t < T:
+                result = self.evolve()
+                dc.collect(result)
+                t = self.rm.rules[0].t
+                dt.append(t)
 
-        return [S,I,C,R,dt]
+        return dc.data, dt
 
 #    def animate(self, num_frames='all', cmap='plasma', savefig=False, writer=animation.writers['ffmpeg']):
 #        """
@@ -195,18 +197,3 @@ class CA_Network:
 #        self.im.set_array(self.evolve())
 #        return self.im,
 #
-
-
-class Gillespie(CA_Network):
-    def __init__(self, adj, heterogeneity):
-        CA_network.__init__(self, adj, heterogeneity)
-
-    def evolve(self):
-        prob = self.compute_prob(self.cells)
-        new_state = self.rm.apply(self.cells, self.prob)
-        self.cells = new_state
-
-        return new_state
-
-    def run_collect(self):
-        pass
