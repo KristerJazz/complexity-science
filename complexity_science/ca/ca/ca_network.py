@@ -19,7 +19,7 @@ class CA_Network:
         self.adj = adj_matrix 
         self.size = len(self.adj)
         self.heterogeneity = heterogeneity
-        self.cells = np.zeros([self.heterogeneity, self.size])
+        self.cells = np.zeros([self.size, self.heterogeneity])
         self.rm = RuleManager()
 
     def evolve(self):
