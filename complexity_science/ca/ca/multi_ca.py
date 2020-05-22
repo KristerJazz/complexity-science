@@ -41,7 +41,7 @@ class MultiCA:
         for ca in self.ca_list:
             ca.evolve()
 
-        
+        """ 
         Updates the neighbor according to the new_state
             n1 = left-top neighbor of new_state
             n2 = top neighbor of new_state 
@@ -52,6 +52,7 @@ class MultiCA:
             n7 = bottom neighbor of new_state
             n8 = left-bottom neighbor of new_state
         -------------
+        """
 
     def initialize_random_bin(self, ratio):
         """
@@ -122,7 +123,7 @@ class MultiCA:
         self.cells = np.random.randint(min_value, max_value, size=self.size)  
         self.update_neighbors()
         
-       def animate(self, num_frames='all', cmap='plasma', savefig=False, writer=animation.writers['ffmpeg']):
+    def animate(self, num_frames='all', cmap='plasma', savefig=False, writer=animation.writers['ffmpeg']):
         """
         Run animation
         ------------

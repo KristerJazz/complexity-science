@@ -5,4 +5,5 @@ install:
 before_script:
   - cd complexity_science
 script:
+  - python test_import.py 
   - python -m pytest
